@@ -1,8 +1,36 @@
+var fightOrSkip = function() {
+  //ask player fight or skip
+  var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter FIGHT or SKIP to choose.");
+
+    // Conditional Recursive function call
+    if (promptFight === "" || promptFight === null) {
+      window.alert("You need to provide a vaild answer. Please try again");
+      return fightOrSkip();
+    }
+  promptFight = promptFight.toLowerCase();
+  if (promptFight === "skip") {
+    var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+    //if yes, leave fight
+    if (confirmSkip) {
+      window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+      //subtract money
+      playerInfo.money = Math.max(0, playerInfo.money - 10);
+      return true;
+    }
+  }
+  return false;
+}
+
 var fight = function(enemy) {
 
   // fight or run prompt
   while(playerInfo.health > 0 && enemy.health > 0) {
-     var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+     if (fightOrSkip()) {
+       // if true, leave fight
+       break;
+     }
+     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
     // if "skip"
     if (promptFight === "skip" || promptFight === "SKIP") {
@@ -177,6 +205,8 @@ var getPLayerName = function() {
 var playerInfo = {
   name: getPLayerName(),
   health: 100,
+
+
   attack: 10,
   money: 10,
   reset: function() {
